@@ -1,0 +1,175 @@
+{
+  "_note": "SYNTHETIC / FICTIONAL prior incident history for the alert-triage lab. No real entities, PII, secrets, or production identifiers.",
+  "INC-2025-014": {
+    "incident_id": "INC-2025-014",
+    "title": "OAuth consent phishing against finance approvers",
+    "date": "2025-02-18",
+    "severity": "High",
+    "disposition": "confirmed_incident",
+    "affected_assets": [
+      "AST-IDP-01",
+      "AST-FIN-LAP-07"
+    ],
+    "indicators": [
+      "new OAuth app",
+      "Mail.Read",
+      "Files.Read.All",
+      "offline_access",
+      "login from AS64555",
+      "MFA fatigue"
+    ],
+    "summary": "A finance approver approved a new OAuth app after repeated MFA prompts. The app requested broad mail and file scopes and reused tokens from an unusual ASN. Containment revoked the OAuth grant and reset the fictional account session.",
+    "lessons": "Impossible travel plus broad OAuth consent on a finance or privileged account should be High and escalated even if mailbox export volume is still small."
+  },
+  "INC-2025-021": {
+    "incident_id": "INC-2025-021",
+    "title": "Nimbus bucket public ACL and bulk object download",
+    "date": "2025-03-09",
+    "severity": "Critical",
+    "disposition": "confirmed_incident",
+    "affected_assets": [
+      "AST-CLOUD-STG-09"
+    ],
+    "indicators": [
+      "public ACL",
+      "GetObject burst",
+      "new access key",
+      "unapproved external account",
+      "customer usage data"
+    ],
+    "summary": "A new access key changed a regulated analytics bucket ACL to public-read and downloaded 12,400 objects to an unapproved external account. Containment disabled the key, restored private ACLs, and preserved object access logs.",
+    "lessons": "Bulk download plus public ACL change on regulated cloud storage is Critical and requires privacy/legal escalation."
+  },
+  "INC-2025-033": {
+    "incident_id": "INC-2025-033",
+    "title": "Build runner encoded PowerShell intrusion attempt",
+    "date": "2025-04-27",
+    "severity": "High",
+    "disposition": "likely_incident",
+    "affected_assets": [
+      "AST-ENG-BLD-04"
+    ],
+    "indicators": [
+      "encoded PowerShell",
+      "suspicious scheduled task",
+      "artifact-cache.example",
+      "blocked egress",
+      "build runner"
+    ],
+    "summary": "A build runner launched encoded PowerShell that attempted to create a scheduled task and contact a look-alike artifact cache domain. Egress was blocked before credential access was observed.",
+    "lessons": "On build infrastructure, encoded PowerShell plus persistence is at least Medium and may be High when it matches the artifact-cache pattern."
+  },
+  "INC-2025-046": {
+    "incident_id": "INC-2025-046",
+    "title": "Claims file share ransomware canary",
+    "date": "2025-05-16",
+    "severity": "Critical",
+    "disposition": "confirmed_incident",
+    "affected_assets": [
+      "AST-FS-02"
+    ],
+    "indicators": [
+      "ransomware canary",
+      "rapid rename",
+      ".lockednote",
+      "backup share access",
+      "regulated claims data"
+    ],
+    "summary": "The file share generated a ransomware canary after 1,120 rapid renames and creation of .lockednote files. The affected file server was isolated and SMB sessions from the source host were terminated.",
+    "lessons": "Ransomware canary on a regulated file share is Critical; isolate the affected host/share and escalate immediately."
+  },
+  "INC-2025-052": {
+    "incident_id": "INC-2025-052",
+    "title": "Approved scanner misclassified as VPN exploit attempt",
+    "date": "2025-06-03",
+    "severity": "Low",
+    "disposition": "benign_false_positive",
+    "affected_assets": [
+      "AST-SCAN-01",
+      "AST-VPN-EDGE-01"
+    ],
+    "indicators": [
+      "redcanary-scan",
+      "scanner-segment",
+      "blocked probe",
+      "weekly scan window"
+    ],
+    "summary": "An approved scanner hit the VPN edge during the weekly scan window and triggered exploit signatures. The user-agent and source segment matched the sanctioned scanner inventory.",
+    "lessons": "When scanner identity, source segment, and blocked result all match the sanctioned testing pattern, classify as benign false positive or blocked attempt."
+  },
+  "INC-2025-067": {
+    "incident_id": "INC-2025-067",
+    "title": "HR portal bulk export by compromised service account",
+    "date": "2025-06-28",
+    "severity": "High",
+    "disposition": "confirmed_incident",
+    "affected_assets": [
+      "AST-HR-SaaS-01"
+    ],
+    "indicators": [
+      "bulk export",
+      "new destination",
+      "service account",
+      "employee records",
+      "unusual ASN"
+    ],
+    "summary": "A service account exported 4,800 synthetic employee records to a destination not listed in the scheduled integration notes. The source ASN differed from the normal integration provider.",
+    "lessons": "Scheduled export accounts are benign only when time, volume, and destination match expected notes; new destination makes the alert High and escalated."
+  },
+  "INC-2025-074": {
+    "incident_id": "INC-2025-074",
+    "title": "Executive endpoint credential access tooling",
+    "date": "2025-07-12",
+    "severity": "High",
+    "disposition": "likely_incident",
+    "affected_assets": [
+      "AST-EXEC-LAP-02"
+    ],
+    "indicators": [
+      "LSASS handle access",
+      "unsigned remote management",
+      "suspicious scheduled task",
+      "executive endpoint"
+    ],
+    "summary": "An executive endpoint showed LSASS handle access by an unsigned remote management binary and creation of a suspicious scheduled task. No exfiltration was confirmed before network containment.",
+    "lessons": "Credential access plus persistence on executive endpoints is High even when exfiltration is not yet proven."
+  },
+  "INC-2025-081": {
+    "incident_id": "INC-2025-081",
+    "title": "Sandbox malware test noisy but contained",
+    "date": "2025-07-30",
+    "severity": "Low",
+    "disposition": "benign_false_positive",
+    "affected_assets": [
+      "AST-DEV-SBX-03"
+    ],
+    "indicators": [
+      "malware test",
+      "sandbox",
+      "blocked execution",
+      "Detection Engineering"
+    ],
+    "summary": "Detection Engineering ran a test malware string in the isolated sandbox. EDR blocked execution and no production targets were contacted.",
+    "lessons": "Sandbox-only blocked malware tests are Low or benign when asset notes confirm the test context."
+  },
+  "INC-2025-090": {
+    "incident_id": "INC-2025-090",
+    "title": "Coordinated finance identity takeover across sign-in, endpoint, and data export",
+    "date": "2025-05-06",
+    "severity": "Critical",
+    "disposition": "confirmed_incident",
+    "affected_assets": [
+      "AST-IDP-01",
+      "AST-FIN-LAP-07",
+      "AST-FIN-APP-01"
+    ],
+    "indicators": [
+      "single finance account across OAuth consent, MFA fatigue, remote tooling, and bulk export",
+      "single source ASN/IP reused across stages",
+      "staged over a few hours",
+      "AS64555"
+    ],
+    "summary": "A single finance account was taken over in stages: OAuth consent grant, MFA-fatigue sign-in, remote-access tooling on the finance workstation, then bulk export from the approvals app \u2014 all from one source IP over a few hours. Triaged individually each alert looked High or Medium; correlated on the shared account and IP it was a Critical campaign.",
+    "lessons": "Correlate multiple medium/high identity, endpoint, and export alerts that share an account or source IP as ONE Critical campaign. Do not triage them in isolation; the aggregate exceeds any single alert."
+  }
+}

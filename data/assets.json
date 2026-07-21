@@ -1,0 +1,205 @@
+{
+  "_note": "SYNTHETIC / FICTIONAL asset context for the alert-triage lab. No real entities, PII, secrets, or production identifiers.",
+  "AST-IDP-01": {
+    "asset_id": "AST-IDP-01",
+    "name": "Helios Identity Tenant",
+    "type": "identity_provider",
+    "business_criticality": "critical",
+    "data_classification": "identity_control_plane",
+    "owner": "Identity Platform",
+    "environment": "production",
+    "exposure": "internet_facing",
+    "tags": [
+      "tier0",
+      "mfa",
+      "oauth"
+    ],
+    "notes": "Controls sign-in, MFA, and OAuth consent for all Meridian Union users. Privileged identity impact requires escalation."
+  },
+  "AST-PAY-API-01": {
+    "asset_id": "AST-PAY-API-01",
+    "name": "Orchid Payment API",
+    "type": "application",
+    "business_criticality": "critical",
+    "data_classification": "payment_card_data",
+    "owner": "Payments Engineering",
+    "environment": "production",
+    "exposure": "internet_facing",
+    "tags": [
+      "pci",
+      "crown_jewel",
+      "api"
+    ],
+    "notes": "Handles tokenized payment events. Public ACL changes or exfiltration indicators are Critical."
+  },
+  "AST-FS-02": {
+    "asset_id": "AST-FS-02",
+    "name": "Iris Claims File Share",
+    "type": "file_server",
+    "business_criticality": "critical",
+    "data_classification": "regulated_claims_data",
+    "owner": "Claims Operations",
+    "environment": "production",
+    "exposure": "internal",
+    "tags": [
+      "file_share",
+      "regulated",
+      "ransomware_canary"
+    ],
+    "notes": "Hosts claims documents. Ransomware canary alerts require immediate isolation and escalation."
+  },
+  "AST-FIN-LAP-07": {
+    "asset_id": "AST-FIN-LAP-07",
+    "name": "Finance Approver Workstation",
+    "type": "endpoint",
+    "business_criticality": "high",
+    "data_classification": "finance_approval_data",
+    "owner": "Finance Operations",
+    "environment": "production",
+    "exposure": "managed_endpoint",
+    "tags": [
+      "privileged_finance",
+      "edr"
+    ],
+    "notes": "Used by fictional payment approver account. Credential or OAuth abuse should escalate."
+  },
+  "AST-ENG-BLD-04": {
+    "asset_id": "AST-ENG-BLD-04",
+    "name": "Cobalt Build Runner 04",
+    "type": "server",
+    "business_criticality": "medium",
+    "data_classification": "source_build_metadata",
+    "owner": "Developer Productivity",
+    "environment": "build",
+    "exposure": "internal",
+    "tags": [
+      "ci",
+      "sandboxed_runner"
+    ],
+    "notes": "Ephemeral build runner. Suspicious commands are important but usually not destructive unless secrets or lateral movement are observed."
+  },
+  "AST-HR-SaaS-01": {
+    "asset_id": "AST-HR-SaaS-01",
+    "name": "Luma HR Portal",
+    "type": "saas_application",
+    "business_criticality": "high",
+    "data_classification": "employee_records",
+    "owner": "People Systems",
+    "environment": "production",
+    "exposure": "internet_facing",
+    "tags": [
+      "hr",
+      "sso",
+      "bulk_export"
+    ],
+    "notes": "Contains synthetic employee records. Bulk export to an unapproved destination is High and may escalate."
+  },
+  "AST-CLOUD-STG-09": {
+    "asset_id": "AST-CLOUD-STG-09",
+    "name": "Nimbus Analytics Bucket",
+    "type": "cloud_storage_bucket",
+    "business_criticality": "critical",
+    "data_classification": "customer_usage_data",
+    "owner": "Data Platform",
+    "environment": "production",
+    "exposure": "cloud_private",
+    "tags": [
+      "analytics",
+      "regulated",
+      "object_storage"
+    ],
+    "notes": "Large object downloads plus public ACL changes indicate potential exfiltration and require escalation."
+  },
+  "AST-VPN-EDGE-01": {
+    "asset_id": "AST-VPN-EDGE-01",
+    "name": "Northgate VPN Edge",
+    "type": "vpn_gateway",
+    "business_criticality": "high",
+    "data_classification": "remote_access_control",
+    "owner": "Network Services",
+    "environment": "production",
+    "exposure": "internet_facing",
+    "tags": [
+      "vpn",
+      "remote_access"
+    ],
+    "notes": "Successful anomalous admin login or exploit attempt may require escalation; blocked scanner probes are low."
+  },
+  "AST-SCAN-01": {
+    "asset_id": "AST-SCAN-01",
+    "name": "Quill Approved Scanner",
+    "type": "scanner",
+    "business_criticality": "low",
+    "data_classification": "security_testing_metadata",
+    "owner": "Security Assurance",
+    "environment": "security_testing",
+    "exposure": "internal",
+    "tags": [
+      "scanner-segment",
+      "approved_scan"
+    ],
+    "notes": "Approved vulnerability scanner using the redcanary-scan user-agent during weekly windows."
+  },
+  "AST-DEV-SBX-03": {
+    "asset_id": "AST-DEV-SBX-03",
+    "name": "Umber Malware Test Sandbox",
+    "type": "sandbox_endpoint",
+    "business_criticality": "low",
+    "data_classification": "test_data_only",
+    "owner": "Detection Engineering",
+    "environment": "sandbox",
+    "exposure": "isolated_internal",
+    "tags": [
+      "malware_test",
+      "lab"
+    ],
+    "notes": "Expected to run test malware strings. Blocked activity is normally benign or low unless it reaches production."
+  },
+  "AST-DB-INV-01": {
+    "asset_id": "AST-DB-INV-01",
+    "name": "Inventory Ledger Database",
+    "type": "database",
+    "business_criticality": "medium",
+    "data_classification": "inventory_records",
+    "owner": "Supply Chain Systems",
+    "environment": "production",
+    "exposure": "internal",
+    "tags": [
+      "database",
+      "etl"
+    ],
+    "notes": "Nightly ETL to the approved warehouse is expected between 02:00 and 03:00 UTC."
+  },
+  "AST-EXEC-LAP-02": {
+    "asset_id": "AST-EXEC-LAP-02",
+    "name": "Executive Laptop 02",
+    "type": "endpoint",
+    "business_criticality": "high",
+    "data_classification": "executive_email_and_files",
+    "owner": "Executive Support",
+    "environment": "production",
+    "exposure": "managed_endpoint",
+    "tags": [
+      "executive",
+      "edr",
+      "sensitive_email"
+    ],
+    "notes": "Endpoint for fictional executive role. Credential access or persistence is High."
+  },
+  "AST-FIN-APP-01": {
+    "asset_id": "AST-FIN-APP-01",
+    "name": "Aurora Finance Approvals App",
+    "type": "application",
+    "business_criticality": "high",
+    "data_classification": "finance_approval_data",
+    "owner": "Finance Systems",
+    "environment": "production",
+    "exposure": "internet_facing",
+    "tags": [
+      "finance",
+      "approvals",
+      "sox"
+    ],
+    "notes": "Holds synthetic payment-approval records. Bulk export to an unapproved destination is High and may escalate; combined with identity compromise it is part of a Critical campaign."
+  }
+}

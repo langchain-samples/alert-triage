@@ -1,0 +1,11 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "alert_triage_agent": "./alert_triage_graph.py:graph",
+    "alert_triage_agent_hitl": "./alert_triage_graph.py:graph_hitl",
+    "alert_triage_deep_agent": "./alert_triage_graph.py:graph_deep",
+    "alert_triage_campaign_agent": "./alert_triage_graph.py:graph_deep_v2"
+  },
+  "env": ".env",
+  "python_version": "3.13"
+}

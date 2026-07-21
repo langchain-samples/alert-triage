@@ -1,0 +1,132 @@
+[
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Triage ALT-1001. Provide severity, disposition, escalation decision, rationale, and containment."}]},
+    "outputs": {
+      "reference_answer": "severity: High\ndisposition: confirmed_incident\nescalate: true\nrationale:\n  - ALT-1001 shows impossible travel 11 minutes apart, nine MFA prompts, and a new OAuth grant requesting Mail.Read, Files.Read.All, and offline_access.\n  - The impacted identity tenant AST-IDP-01 is tier-0/critical and the account is tied to payment approval on AST-FIN-LAP-07.\n  - This matches INC-2025-014 OAuth consent phishing; severity_rubric.md and identity_endpoint_cloud_indicators.md make privileged/broad OAuth abuse High with escalation.\nrecommended_containment:\n  - Revoke only the Ledger Sync Viewer OAuth grant.\n  - Reset the implicated account session and require password/MFA reset.\n  - Preserve sign-in and OAuth audit logs and notify the SOC lead.\nuncertainty: Unknown whether additional mailbox items were exported beyond the 180 observed; next check is mailbox audit review.\ncitations: ALT-1001, AST-IDP-01, AST-FIN-LAP-07, INC-2025-014, severity_rubric.md, identity_endpoint_cloud_indicators.md, escalation_containment.md",
+      "severity": "High",
+      "disposition": "confirmed_incident",
+      "required_evidence": ["impossible travel 11 minutes apart", "nine MFA prompts", "OAuth scopes Mail.Read/Files.Read.All/offline_access", "payment approval role", "INC-2025-014 OAuth phishing match"],
+      "recommended_containment": ["revoke the Ledger Sync Viewer OAuth grant", "reset the implicated account session and require password/MFA reset", "preserve identity sign-in and OAuth audit logs", "notify SOC lead for privileged finance account escalation"],
+      "escalate": true,
+      "expected_tools": ["get_alert", "get_asset_context", "search_incident_history", "search_soc_kb"]
+    },
+    "metadata": {"intent": "triage_correctness", "lab": "alert-triage/02_evaluate", "alert_id": "ALT-1001"}
+  },
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Triage ALT-1002 and be explicit about whether it needs incident-commander escalation."}]},
+    "outputs": {
+      "reference_answer": "severity: Critical\ndisposition: confirmed_incident\nescalate: true\nrationale:\n  - ALT-1002 has a new access key, public-read ACL change, 7,900 GetObject events in 21 minutes, and transfer to unapproved external-drop.example.\n  - AST-CLOUD-STG-09 is a critical production bucket holding customer_usage_data.\n  - INC-2025-021 is a direct prior match; identity_endpoint_cloud_indicators.md says bulk downloads plus public ACL change on regulated storage are Critical, and severity_rubric.md requires escalation.\nrecommended_containment:\n  - Disable only the new access key.\n  - Restore the bucket ACL to private and preserve object access logs.\n  - Page the incident commander and notify privacy/legal.\nuncertainty: Exact object sensitivity is not listed; next safe check is object access log and data-classification review.\ncitations: ALT-1002, AST-CLOUD-STG-09, INC-2025-021, severity_rubric.md, identity_endpoint_cloud_indicators.md, escalation_containment.md",
+      "severity": "Critical",
+      "disposition": "confirmed_incident",
+      "required_evidence": ["new access key", "public-read ACL change", "7,900 GetObject events", "unapproved external destination", "regulated customer usage data", "INC-2025-021 match"],
+      "recommended_containment": ["disable the new access key only", "restore bucket ACL to private", "preserve object access logs", "page incident commander and notify privacy/legal for regulated data exposure"],
+      "escalate": true,
+      "expected_tools": ["get_alert", "get_asset_context", "search_incident_history", "search_soc_kb"]
+    },
+    "metadata": {"intent": "evidence_groundedness", "lab": "alert-triage/02_evaluate", "alert_id": "ALT-1002"}
+  },
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Analyze ALT-1003. Should containment start immediately?"}]},
+    "outputs": {
+      "reference_answer": "severity: Critical\ndisposition: confirmed_incident\nescalate: true\nrationale:\n  - ALT-1003 reports a ransomware canary modification, 1,340 rapid renames with .lockednote, and backup share access.\n  - AST-FS-02 is a critical regulated_claims_data file server.\n  - INC-2025-046 matches the same ransomware canary pattern; identity_endpoint_cloud_indicators.md and escalation_containment.md support immediate scoped isolation.\nrecommended_containment:\n  - Isolate AST-FS-02 or the affected SMB path.\n  - Terminate sessions from host-claims-ws-17.\n  - Snapshot file server logs before cleanup and page the incident commander.\nuncertainty: Source host root cause is unknown; next check is endpoint triage on host-claims-ws-17.\ncitations: ALT-1003, AST-FS-02, INC-2025-046, severity_rubric.md, identity_endpoint_cloud_indicators.md, escalation_containment.md",
+      "severity": "Critical",
+      "disposition": "confirmed_incident",
+      "required_evidence": ["ransomware canary modified", "1,340 rapid renames", ".lockednote extension", "backup share access", "regulated claims file server", "INC-2025-046 match"],
+      "recommended_containment": ["isolate AST-FS-02 or the affected SMB path", "terminate sessions from host-claims-ws-17", "snapshot file server logs before cleanup", "page incident commander"],
+      "escalate": true,
+      "expected_tools": ["get_alert", "get_asset_context", "search_incident_history", "search_soc_kb"]
+    },
+    "metadata": {"intent": "containment_actionability", "lab": "alert-triage/02_evaluate", "alert_id": "ALT-1003"}
+  },
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Triage ALT-1004. It looks suspicious, but avoid over-containment if evidence is incomplete."}]},
+    "outputs": {
+      "reference_answer": "severity: Medium\ndisposition: needs_review\nescalate: false\nrationale:\n  - ALT-1004 has encoded PowerShell and a scheduled-task attempt, but egress to artifact-cache.example was blocked.\n  - AST-ENG-BLD-04 is medium-criticality ephemeral build infrastructure, and there is no LSASS access or credential dump.\n  - INC-2025-033 raises concern for a known build-runner pattern, but escalation_containment.md says Medium cases should gather evidence before destructive action.\nrecommended_containment:\n  - Collect job artifacts and quarantine only the single build runner if needed.\n  - Disable the suspicious scheduled task if present.\n  - Review the triggering pipeline commit and monitor for credential access or lateral movement.\nuncertainty: Unknown whether the encoded command came from a malicious commit; next check is pipeline diff and artifact review.\ncitations: ALT-1004, AST-ENG-BLD-04, INC-2025-033, identity_endpoint_cloud_indicators.md, escalation_containment.md",
+      "severity": "Medium",
+      "disposition": "needs_review",
+      "required_evidence": ["encoded PowerShell", "scheduled task attempt", "blocked artifact-cache.example egress", "no credential access", "medium-criticality build runner", "INC-2025-033 pattern"],
+      "recommended_containment": ["quarantine the single build runner after collecting job artifacts", "disable the suspicious scheduled task if present", "review the triggering pipeline commit", "monitor for credential access or lateral movement before escalation"],
+      "escalate": false,
+      "expected_tools": ["get_alert", "get_asset_context", "search_incident_history", "search_soc_kb"]
+    },
+    "metadata": {"intent": "containment_actionability", "lab": "alert-triage/02_evaluate", "alert_id": "ALT-1004"}
+  },
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Triage ALT-1005. Is this a real VPN incident or a false positive?"}]},
+    "outputs": {
+      "reference_answer": "severity: Low\ndisposition: benign_false_positive\nescalate: false\nrationale:\n  - ALT-1005 was blocked at the VPN edge with no successful authentication or follow-on sessions.\n  - The source asset AST-SCAN-01 is approved_scan/scanner-segment, and the user-agent redcanary-scan/4.2 is explicitly sanctioned.\n  - INC-2025-052 and false_positive_guidance.md say this scanner pattern should be benign_false_positive or blocked_attempt.\nrecommended_containment:\n  - Document the approved scan indicators.\n  - Suppress only this scanner signature during the approved window with expiry.\n  - Leave VPN production containment unchanged.\nuncertainty: None material from the fixture; if repeated outside the scan window, re-check scanner scheduling.\ncitations: ALT-1005, AST-VPN-EDGE-01, AST-SCAN-01, INC-2025-052, false_positive_guidance.md, escalation_containment.md",
+      "severity": "Low",
+      "disposition": "benign_false_positive",
+      "required_evidence": ["blocked VPN exploit payload", "AST-SCAN-01 approved_scan", "scanner-segment", "redcanary-scan/4.2", "weekly scan window", "no follow-on sessions"],
+      "recommended_containment": ["document sanctioned scan evidence", "suppress only this scanner signature during the approved window with expiry", "leave VPN production containment unchanged"],
+      "escalate": false,
+      "expected_tools": ["get_alert", "get_asset_context", "search_incident_history", "search_soc_kb"]
+    },
+    "metadata": {"intent": "triage_correctness", "lab": "alert-triage/02_evaluate", "alert_id": "ALT-1005"}
+  },
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Triage ALT-1006 for the HR portal export anomaly."}]},
+    "outputs": {
+      "reference_answer": "severity: High\ndisposition: likely_incident\nescalate: true\nrationale:\n  - ALT-1006 shows 4,200 employee-record rows exported outside the scheduled integration window to unknown-sync.example from an unusual ASN.\n  - AST-HR-SaaS-01 is a high-criticality production SaaS app containing employee_records.\n  - INC-2025-067 and false_positive_guidance.md say scheduled exports are benign only when destination, volume, and time match expected notes; here they do not.\nrecommended_containment:\n  - Pause the svc-hr-sync-r token rather than disabling unrelated accounts.\n  - Preserve SaaS export audit logs.\n  - Confirm the destination with People Systems and escalate to SOC lead/privacy reviewer.\nuncertainty: Unknown whether unknown-sync.example is a late-approved integration; next check is owner validation.\ncitations: ALT-1006, AST-HR-SaaS-01, INC-2025-067, severity_rubric.md, false_positive_guidance.md, escalation_containment.md",
+      "severity": "High",
+      "disposition": "likely_incident",
+      "required_evidence": ["4,200 employee-record rows exported", "outside scheduled window", "unknown-sync.example unapproved destination", "unusual ASN", "employee_records", "INC-2025-067 match"],
+      "recommended_containment": ["pause the svc-hr-sync-r token", "preserve SaaS export audit logs", "confirm with People Systems owner whether destination is approved", "escalate to SOC lead and privacy reviewer"],
+      "escalate": true,
+      "expected_tools": ["get_alert", "get_asset_context", "search_incident_history", "search_soc_kb"]
+    },
+    "metadata": {"intent": "evidence_groundedness", "lab": "alert-triage/02_evaluate", "alert_id": "ALT-1006"}
+  },
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Triage ALT-1007 and recommend scoped containment for the executive endpoint."}]},
+    "outputs": {
+      "reference_answer": "severity: High\ndisposition: likely_incident\nescalate: true\nrationale:\n  - ALT-1007 shows LSASS handle access by an unsigned remote management binary and scheduled task UpdaterSvc.\n  - AST-EXEC-LAP-02 is a high-criticality executive endpoint; executive_email_and_files are sensitive.\n  - INC-2025-074 and identity_endpoint_cloud_indicators.md say credential access plus persistence on executive endpoints is High even without confirmed exfiltration.\nrecommended_containment:\n  - Isolate AST-EXEC-LAP-02 after preserving the EDR triage package.\n  - Disable scheduled task UpdaterSvc.\n  - Reset the implicated account session and escalate to the SOC lead.\nuncertainty: Proxy logs do not confirm exfiltration; next check is endpoint and proxy timeline review.\ncitations: ALT-1007, AST-EXEC-LAP-02, INC-2025-074, severity_rubric.md, identity_endpoint_cloud_indicators.md, escalation_containment.md",
+      "severity": "High",
+      "disposition": "likely_incident",
+      "required_evidence": ["LSASS handle access", "unsigned remote management binary", "scheduled task UpdaterSvc", "executive endpoint", "INC-2025-074 match", "no confirmed exfiltration"],
+      "recommended_containment": ["isolate AST-EXEC-LAP-02 after preserving EDR triage package", "disable scheduled task UpdaterSvc", "reset the implicated account session", "escalate to SOC lead because executive credential access is High"],
+      "escalate": true,
+      "expected_tools": ["get_alert", "get_asset_context", "search_incident_history", "search_soc_kb"]
+    },
+    "metadata": {"intent": "containment_actionability", "lab": "alert-triage/02_evaluate", "alert_id": "ALT-1007"}
+  },
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Triage ALT-1008. Should we isolate anything?"}]},
+    "outputs": {
+      "reference_answer": "severity: Low\ndisposition: benign_false_positive\nescalate: false\nrationale:\n  - ALT-1008 was blocked before execution and had no production connections.\n  - AST-DEV-SBX-03 is a low-criticality malware_test lab owned by Detection Engineering.\n  - INC-2025-081 and false_positive_guidance.md describe this sandbox-only blocked test pattern as benign/Low.\nrecommended_containment:\n  - Document the sandbox test context.\n  - Leave production controls unchanged; do not isolate unrelated systems.\n  - Optionally suppress the exact test hash for the sandbox only with expiry.\nuncertainty: If the test was not owner-approved, confirm with Detection Engineering; fixture asset notes indicate it is expected.\ncitations: ALT-1008, AST-DEV-SBX-03, INC-2025-081, false_positive_guidance.md, escalation_containment.md",
+      "severity": "Low",
+      "disposition": "benign_false_positive",
+      "required_evidence": ["EDR blocked test malware string", "malware_test lab asset", "Detection Engineering owner", "no production connections", "INC-2025-081 benign sandbox match"],
+      "recommended_containment": ["document the sandbox test context", "leave production controls unchanged", "optionally suppress the exact test hash for the sandbox only with expiry"],
+      "escalate": false,
+      "expected_tools": ["get_alert", "get_asset_context", "search_incident_history", "search_soc_kb"]
+    },
+    "metadata": {"intent": "triage_correctness", "lab": "alert-triage/02_evaluate", "alert_id": "ALT-1008"}
+  },
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Triage ALT-1010. It targets a critical payment API, but all attempts were blocked."}]},
+    "outputs": {
+      "reference_answer": "severity: Medium\ndisposition: blocked_attempt\nescalate: false\nrationale:\n  - ALT-1010 has 1,900 failed login attempts, but WAF blocked all attempts and there was no successful session, token issuance, or data access.\n  - AST-PAY-API-01 is critical payment_card_data infrastructure, raising impact if compromise appears.\n  - severity_rubric.md supports Medium for suspicious but blocked activity without compromise evidence; escalation_containment.md says avoid disruptive action for Medium needs-review/blocked cases.\nrecommended_containment:\n  - Keep the WAF block in place and rate-limit the source pattern.\n  - Monitor for successful sessions or token issuance.\n  - Do not disable payment users without new evidence.\nuncertainty: Unknown whether other sources are attempting the same pattern; next check is WAF aggregation by signature.\ncitations: ALT-1010, AST-PAY-API-01, severity_rubric.md, escalation_containment.md",
+      "severity": "Medium",
+      "disposition": "blocked_attempt",
+      "required_evidence": ["1,900 failed login attempts", "WAF blocked all attempts", "no successful session or token issuance", "critical payment asset", "no successful prior incident match"],
+      "recommended_containment": ["keep WAF block in place", "rate-limit the source pattern", "monitor for successful sessions or token issuance", "do not disable payment users without new evidence"],
+      "escalate": false,
+      "expected_tools": ["get_alert", "get_asset_context", "search_soc_kb"]
+    },
+    "metadata": {"intent": "evidence_groundedness", "lab": "alert-triage/02_evaluate", "alert_id": "ALT-1010"}
+  },
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Triage ALT-1011. The MFA prompts were all denied; does the privileged role change the decision?"}]},
+    "outputs": {
+      "reference_answer": "severity: High\ndisposition: blocked_attempt\nescalate: true\nrationale:\n  - ALT-1011 shows twenty-two denied MFA prompts from an unusual ASN with no successful login, device registration, OAuth consent, or group change.\n  - AST-IDP-01 is the critical identity control plane and the account has an identity administration role.\n  - INC-2025-014 is a related MFA fatigue/OAuth pattern; severity_rubric.md escalates High privileged identity cases even when this instance is blocked.\nrecommended_containment:\n  - Require step-up verification for acct-id-admin-k.\n  - Notify the identity owner and SOC lead.\n  - Review sign-in logs for token reuse, but do not revoke unrelated admin accounts.\nuncertainty: Unknown whether the account's password was exposed; next check is sign-in/token audit for the specific account.\ncitations: ALT-1011, AST-IDP-01, INC-2025-014, severity_rubric.md, identity_endpoint_cloud_indicators.md, escalation_containment.md",
+      "severity": "High",
+      "disposition": "blocked_attempt",
+      "required_evidence": ["twenty-two denied MFA prompts", "no successful login", "identity administration role", "unusual ASN", "no OAuth or group change", "INC-2025-014 related MFA fatigue pattern"],
+      "recommended_containment": ["temporarily require step-up verification for acct-id-admin-k", "notify identity owner and SOC lead", "review sign-in logs for token reuse", "do not revoke unrelated admin accounts"],
+      "escalate": true,
+      "expected_tools": ["get_alert", "get_asset_context", "search_incident_history", "search_soc_kb"]
+    },
+    "metadata": {"intent": "triage_correctness", "lab": "alert-triage/02_evaluate", "alert_id": "ALT-1011"}
+  }
+]

@@ -1,0 +1,1105 @@
+{
+  "_note": "SYNTHETIC / FICTIONAL alert evidence for the alert-triage lab. No real entities, PII, secrets, IP addresses, or production identifiers.",
+  "ALT-1001": {
+    "alert_id": "ALT-1001",
+    "timestamp": "2025-08-04T13:42:00Z",
+    "detector": "Identity Impossible Travel + OAuth Consent",
+    "title": "Finance approver impossible travel followed by broad OAuth grant",
+    "entities": {
+      "assets": [
+        "AST-IDP-01",
+        "AST-FIN-LAP-07"
+      ],
+      "accounts": [
+        "acct-fin-approver-a"
+      ],
+      "domains": [
+        "consent-ledger.example"
+      ],
+      "ips": [
+        "198.51.100.23"
+      ]
+    },
+    "evidence": [
+      "Successful login from normal region followed 11 minutes later by login from AS64555 synthetic offshore region",
+      "Nine MFA push prompts in 6 minutes before success",
+      "New OAuth app 'Ledger Sync Viewer' requested Mail.Read, Files.Read.All, and offline_access",
+      "Account has payment approval role and normally uses AST-FIN-LAP-07",
+      "Mailbox export volume observed: 180 messages in 12 minutes"
+    ],
+    "asset_ids": [
+      "AST-IDP-01",
+      "AST-FIN-LAP-07"
+    ],
+    "related_incident_ids": [
+      "INC-2025-014"
+    ],
+    "recommended_reference": {
+      "severity": "High",
+      "disposition": "confirmed_incident",
+      "escalate": true,
+      "required_evidence": [
+        "impossible travel 11 minutes apart",
+        "nine MFA prompts",
+        "OAuth scopes Mail.Read/Files.Read.All/offline_access",
+        "payment approval role",
+        "INC-2025-014 OAuth phishing match"
+      ],
+      "recommended_containment": [
+        "revoke the Ledger Sync Viewer OAuth grant",
+        "reset the implicated account session and require password/MFA reset",
+        "preserve identity sign-in and OAuth audit logs",
+        "notify SOC lead for privileged finance account escalation"
+      ]
+    }
+  },
+  "ALT-1002": {
+    "alert_id": "ALT-1002",
+    "timestamp": "2025-08-04T14:10:00Z",
+    "detector": "Cloud Storage Exfiltration",
+    "title": "Analytics bucket ACL changed to public during large object download",
+    "entities": {
+      "assets": [
+        "AST-CLOUD-STG-09"
+      ],
+      "accounts": [
+        "svc-data-pipeline-z"
+      ],
+      "domains": [
+        "external-drop.example"
+      ],
+      "ips": [
+        "203.0.113.77"
+      ]
+    },
+    "evidence": [
+      "New access key for svc-data-pipeline-z created 18 minutes before alert",
+      "Bucket ACL changed from private to public-read",
+      "7,900 GetObject events in 21 minutes from unusual ASN",
+      "Transfer destination external-drop.example is not in approved data platform notes",
+      "Bucket classification is customer_usage_data"
+    ],
+    "asset_ids": [
+      "AST-CLOUD-STG-09"
+    ],
+    "related_incident_ids": [
+      "INC-2025-021"
+    ],
+    "recommended_reference": {
+      "severity": "Critical",
+      "disposition": "confirmed_incident",
+      "escalate": true,
+      "required_evidence": [
+        "new access key",
+        "public-read ACL change",
+        "7,900 GetObject events",
+        "unapproved external destination",
+        "regulated customer usage data",
+        "INC-2025-021 match"
+      ],
+      "recommended_containment": [
+        "disable the new access key only",
+        "restore bucket ACL to private",
+        "preserve object access logs",
+        "page incident commander and notify privacy/legal for regulated data exposure"
+      ]
+    }
+  },
+  "ALT-1003": {
+    "alert_id": "ALT-1003",
+    "timestamp": "2025-08-04T15:22:00Z",
+    "detector": "Ransomware Canary",
+    "title": "Claims file share rapid rename with ransomware canary hit",
+    "entities": {
+      "assets": [
+        "AST-FS-02"
+      ],
+      "accounts": [
+        "acct-claims-temp-b"
+      ],
+      "hosts": [
+        "host-claims-ws-17"
+      ]
+    },
+    "evidence": [
+      "Ransomware canary file on AST-FS-02 modified",
+      "1,340 rapid file rename events in 9 minutes with extension .lockednote",
+      "Source host accessed backup share immediately before rename burst",
+      "File server stores regulated_claims_data",
+      "Pattern matches prior ransomware canary incident"
+    ],
+    "asset_ids": [
+      "AST-FS-02"
+    ],
+    "related_incident_ids": [
+      "INC-2025-046"
+    ],
+    "recommended_reference": {
+      "severity": "Critical",
+      "disposition": "confirmed_incident",
+      "escalate": true,
+      "required_evidence": [
+        "ransomware canary modified",
+        "1,340 rapid renames",
+        ".lockednote extension",
+        "backup share access",
+        "regulated claims file server",
+        "INC-2025-046 match"
+      ],
+      "recommended_containment": [
+        "isolate AST-FS-02 or the affected SMB path",
+        "terminate sessions from host-claims-ws-17",
+        "snapshot file server logs before cleanup",
+        "page incident commander"
+      ]
+    }
+  },
+  "ALT-1004": {
+    "alert_id": "ALT-1004",
+    "timestamp": "2025-08-04T16:05:00Z",
+    "detector": "Endpoint Suspicious PowerShell",
+    "title": "Build runner encoded PowerShell attempted persistence",
+    "entities": {
+      "assets": [
+        "AST-ENG-BLD-04"
+      ],
+      "accounts": [
+        "svc-ci-runner-d"
+      ],
+      "domains": [
+        "artifact-cache.example"
+      ]
+    },
+    "evidence": [
+      "PowerShell launched with encoded command from build job step",
+      "Command attempted to create scheduled task 'CacheWarmup'",
+      "Outbound connection to artifact-cache.example was blocked by egress policy",
+      "No LSASS access or credential dump observed",
+      "Build runner is medium criticality ephemeral infrastructure"
+    ],
+    "asset_ids": [
+      "AST-ENG-BLD-04"
+    ],
+    "related_incident_ids": [
+      "INC-2025-033"
+    ],
+    "recommended_reference": {
+      "severity": "Medium",
+      "disposition": "needs_review",
+      "escalate": false,
+      "required_evidence": [
+        "encoded PowerShell",
+        "scheduled task attempt",
+        "blocked artifact-cache.example egress",
+        "no credential access",
+        "medium-criticality build runner",
+        "INC-2025-033 pattern"
+      ],
+      "recommended_containment": [
+        "quarantine the single build runner after collecting job artifacts",
+        "disable the suspicious scheduled task if present",
+        "review the triggering pipeline commit",
+        "monitor for credential access or lateral movement before escalation"
+      ]
+    }
+  },
+  "ALT-1005": {
+    "alert_id": "ALT-1005",
+    "timestamp": "2025-08-04T17:18:00Z",
+    "detector": "VPN Exploit Signature",
+    "title": "VPN edge exploit signature from approved scanner",
+    "entities": {
+      "assets": [
+        "AST-VPN-EDGE-01",
+        "AST-SCAN-01"
+      ],
+      "accounts": [
+        "svc-approved-scan"
+      ],
+      "user_agents": [
+        "redcanary-scan/4.2"
+      ]
+    },
+    "evidence": [
+      "Exploit payload blocked at VPN edge with no successful authentication",
+      "Source asset AST-SCAN-01 is tagged approved_scan and scanner-segment",
+      "User-agent redcanary-scan/4.2 matches sanctioned scanner",
+      "Timestamp falls inside weekly Security Assurance scan window",
+      "No follow-on sessions or new VPN users observed"
+    ],
+    "asset_ids": [
+      "AST-VPN-EDGE-01",
+      "AST-SCAN-01"
+    ],
+    "related_incident_ids": [
+      "INC-2025-052"
+    ],
+    "recommended_reference": {
+      "severity": "Low",
+      "disposition": "benign_false_positive",
+      "escalate": false,
+      "required_evidence": [
+        "blocked VPN exploit payload",
+        "AST-SCAN-01 approved_scan",
+        "scanner-segment",
+        "redcanary-scan/4.2",
+        "weekly scan window",
+        "no follow-on sessions"
+      ],
+      "recommended_containment": [
+        "document sanctioned scan evidence",
+        "suppress only this scanner signature during the approved window with expiry",
+        "leave VPN production containment unchanged"
+      ]
+    }
+  },
+  "ALT-1006": {
+    "alert_id": "ALT-1006",
+    "timestamp": "2025-08-04T18:37:00Z",
+    "detector": "SaaS Bulk Export Anomaly",
+    "title": "HR portal bulk export to unapproved destination",
+    "entities": {
+      "assets": [
+        "AST-HR-SaaS-01"
+      ],
+      "accounts": [
+        "svc-hr-sync-r"
+      ],
+      "domains": [
+        "unknown-sync.example"
+      ],
+      "ips": [
+        "198.51.100.88"
+      ]
+    },
+    "evidence": [
+      "4,200 employee-record rows exported outside the scheduled integration window",
+      "Destination unknown-sync.example is not in asset notes for approved HR integrations",
+      "Service account used from unusual ASN",
+      "No public sharing link observed",
+      "Asset classification is employee_records"
+    ],
+    "asset_ids": [
+      "AST-HR-SaaS-01"
+    ],
+    "related_incident_ids": [
+      "INC-2025-067"
+    ],
+    "recommended_reference": {
+      "severity": "High",
+      "disposition": "likely_incident",
+      "escalate": true,
+      "required_evidence": [
+        "4,200 employee-record rows exported",
+        "outside scheduled window",
+        "unknown-sync.example unapproved destination",
+        "unusual ASN",
+        "employee_records",
+        "INC-2025-067 match"
+      ],
+      "recommended_containment": [
+        "pause the svc-hr-sync-r token",
+        "preserve SaaS export audit logs",
+        "confirm with People Systems owner whether destination is approved",
+        "escalate to SOC lead and privacy reviewer"
+      ]
+    }
+  },
+  "ALT-1007": {
+    "alert_id": "ALT-1007",
+    "timestamp": "2025-08-04T19:14:00Z",
+    "detector": "Endpoint Credential Access",
+    "title": "Executive laptop LSASS access by unsigned remote management binary",
+    "entities": {
+      "assets": [
+        "AST-EXEC-LAP-02"
+      ],
+      "accounts": [
+        "acct-exec-b"
+      ],
+      "hashes": [
+        "sha256:fictional-lsass-tool"
+      ]
+    },
+    "evidence": [
+      "Unsigned remote management binary opened LSASS handle",
+      "Suspicious scheduled task 'UpdaterSvc' created 3 minutes later",
+      "No confirmed data exfiltration in proxy logs",
+      "Endpoint belongs to executive support population",
+      "Telemetry overlaps prior executive endpoint incident"
+    ],
+    "asset_ids": [
+      "AST-EXEC-LAP-02"
+    ],
+    "related_incident_ids": [
+      "INC-2025-074"
+    ],
+    "recommended_reference": {
+      "severity": "High",
+      "disposition": "likely_incident",
+      "escalate": true,
+      "required_evidence": [
+        "LSASS handle access",
+        "unsigned remote management binary",
+        "scheduled task UpdaterSvc",
+        "executive endpoint",
+        "INC-2025-074 match",
+        "no confirmed exfiltration"
+      ],
+      "recommended_containment": [
+        "isolate AST-EXEC-LAP-02 after preserving EDR triage package",
+        "disable scheduled task UpdaterSvc",
+        "reset the implicated account session",
+        "escalate to SOC lead because executive credential access is High"
+      ]
+    }
+  },
+  "ALT-1008": {
+    "alert_id": "ALT-1008",
+    "timestamp": "2025-08-04T20:02:00Z",
+    "detector": "Sandbox Malware Signature",
+    "title": "Detection engineering sandbox blocked test malware string",
+    "entities": {
+      "assets": [
+        "AST-DEV-SBX-03"
+      ],
+      "accounts": [
+        "acct-detect-eng-c"
+      ],
+      "hashes": [
+        "sha256:fictional-test-eicar"
+      ]
+    },
+    "evidence": [
+      "EDR blocked test malware string before execution",
+      "Asset AST-DEV-SBX-03 is tagged malware_test and lab",
+      "Owner is Detection Engineering",
+      "No connections to production assets observed",
+      "Pattern matches prior sandbox benign test"
+    ],
+    "asset_ids": [
+      "AST-DEV-SBX-03"
+    ],
+    "related_incident_ids": [
+      "INC-2025-081"
+    ],
+    "recommended_reference": {
+      "severity": "Low",
+      "disposition": "benign_false_positive",
+      "escalate": false,
+      "required_evidence": [
+        "EDR blocked test malware string",
+        "malware_test lab asset",
+        "Detection Engineering owner",
+        "no production connections",
+        "INC-2025-081 benign sandbox match"
+      ],
+      "recommended_containment": [
+        "document the sandbox test context",
+        "leave production controls unchanged",
+        "optionally suppress the exact test hash for the sandbox only with expiry"
+      ]
+    }
+  },
+  "ALT-1009": {
+    "alert_id": "ALT-1009",
+    "timestamp": "2025-08-04T21:11:00Z",
+    "detector": "Database Export Volume",
+    "title": "Inventory ledger ETL export within expected window",
+    "entities": {
+      "assets": [
+        "AST-DB-INV-01"
+      ],
+      "accounts": [
+        "svc-inventory-etl"
+      ],
+      "domains": [
+        "warehouse-approved.example"
+      ]
+    },
+    "evidence": [
+      "48,000 inventory rows exported at 02:17 UTC",
+      "Destination warehouse-approved.example matches approved warehouse notes",
+      "Service account svc-inventory-etl used normal network path",
+      "No public sharing, unusual ASN, or failed authentication observed",
+      "Asset notes document nightly ETL between 02:00 and 03:00 UTC"
+    ],
+    "asset_ids": [
+      "AST-DB-INV-01"
+    ],
+    "related_incident_ids": [],
+    "recommended_reference": {
+      "severity": "Informational",
+      "disposition": "benign_false_positive",
+      "escalate": false,
+      "required_evidence": [
+        "02:17 UTC export",
+        "warehouse-approved.example approved destination",
+        "normal service account path",
+        "nightly ETL 02:00-03:00 UTC",
+        "no unusual ASN or public sharing"
+      ],
+      "recommended_containment": [
+        "document expected ETL activity",
+        "no containment",
+        "consider tuning volume alert to recognize the approved window and destination"
+      ]
+    }
+  },
+  "ALT-1010": {
+    "alert_id": "ALT-1010",
+    "timestamp": "2025-08-04T22:26:00Z",
+    "detector": "Payment API Credential Stuffing",
+    "title": "Payment API burst of failed logins with blocked credential stuffing signature",
+    "entities": {
+      "assets": [
+        "AST-PAY-API-01"
+      ],
+      "accounts": [
+        "multiple-customer-logins"
+      ],
+      "ips": [
+        "203.0.113.129"
+      ]
+    },
+    "evidence": [
+      "1,900 failed login attempts against Orchid Payment API in 14 minutes",
+      "WAF credential-stuffing signature blocked all attempts before authentication",
+      "No successful session, token issuance, or payment API data access observed",
+      "Target asset is critical payment_card_data application",
+      "No matching prior incident with successful compromise"
+    ],
+    "asset_ids": [
+      "AST-PAY-API-01"
+    ],
+    "related_incident_ids": [],
+    "recommended_reference": {
+      "severity": "Medium",
+      "disposition": "blocked_attempt",
+      "escalate": false,
+      "required_evidence": [
+        "1,900 failed login attempts",
+        "WAF blocked all attempts",
+        "no successful session or token issuance",
+        "critical payment asset",
+        "no successful prior incident match"
+      ],
+      "recommended_containment": [
+        "keep WAF block in place",
+        "rate-limit the source pattern",
+        "monitor for successful sessions or token issuance",
+        "do not disable payment users without new evidence"
+      ]
+    }
+  },
+  "ALT-1011": {
+    "alert_id": "ALT-1011",
+    "timestamp": "2025-08-05T00:07:00Z",
+    "detector": "Identity MFA Fatigue",
+    "title": "Privileged identity admin MFA fatigue without successful login",
+    "entities": {
+      "assets": [
+        "AST-IDP-01"
+      ],
+      "accounts": [
+        "acct-id-admin-k"
+      ],
+      "ips": [
+        "198.51.100.144"
+      ]
+    },
+    "evidence": [
+      "Twenty-two MFA push prompts denied over 8 minutes",
+      "No successful login or new device registration observed",
+      "Account belongs to identity administration role",
+      "Source ASN is unusual for the account",
+      "No OAuth consent or group change followed"
+    ],
+    "asset_ids": [
+      "AST-IDP-01"
+    ],
+    "related_incident_ids": [
+      "INC-2025-014"
+    ],
+    "recommended_reference": {
+      "severity": "High",
+      "disposition": "blocked_attempt",
+      "escalate": true,
+      "required_evidence": [
+        "twenty-two denied MFA prompts",
+        "no successful login",
+        "identity administration role",
+        "unusual ASN",
+        "no OAuth or group change",
+        "INC-2025-014 related MFA fatigue pattern"
+      ],
+      "recommended_containment": [
+        "temporarily require step-up verification for acct-id-admin-k",
+        "notify identity owner and SOC lead",
+        "review sign-in logs for token reuse",
+        "do not revoke unrelated admin accounts"
+      ]
+    }
+  },
+  "ALT-1012": {
+    "alert_id": "ALT-1012",
+    "timestamp": "2025-08-05T01:33:00Z",
+    "detector": "Endpoint Suspicious Script",
+    "title": "Finance workstation suspicious script blocked before persistence",
+    "entities": {
+      "assets": [
+        "AST-FIN-LAP-07"
+      ],
+      "accounts": [
+        "acct-fin-approver-a"
+      ],
+      "domains": [
+        "docs-preview.example"
+      ]
+    },
+    "evidence": [
+      "Script interpreter launched from browser download folder",
+      "EDR blocked outbound callback to docs-preview.example",
+      "No scheduled task, LSASS access, or credential dump observed",
+      "Endpoint has high finance criticality",
+      "No OAuth grant or mailbox export followed"
+    ],
+    "asset_ids": [
+      "AST-FIN-LAP-07"
+    ],
+    "related_incident_ids": [],
+    "recommended_reference": {
+      "severity": "Medium",
+      "disposition": "needs_review",
+      "escalate": false,
+      "required_evidence": [
+        "browser-download script launch",
+        "EDR blocked docs-preview.example callback",
+        "no persistence or credential access",
+        "high finance endpoint",
+        "no OAuth grant or export"
+      ],
+      "recommended_containment": [
+        "collect EDR triage package",
+        "remove the downloaded script if present",
+        "monitor for identity follow-on activity",
+        "avoid account disablement unless new evidence appears"
+      ]
+    }
+  },
+  "ALT-1013": {
+    "alert_id": "ALT-1013",
+    "timestamp": "2025-08-05T03:45:00Z",
+    "detector": "Cloud Access Key Hygiene",
+    "title": "Old analytics service key used from normal location",
+    "entities": {
+      "assets": [
+        "AST-CLOUD-STG-09"
+      ],
+      "accounts": [
+        "svc-analytics-reader"
+      ],
+      "ips": [
+        "192.0.2.44"
+      ]
+    },
+    "evidence": [
+      "Access key age reached 91 days",
+      "GetObject volume: 120 objects in 30 minutes",
+      "Access from expected data platform network",
+      "No ACL change, public sharing, or unusual ASN observed",
+      "Bucket is critical but evidence is hygiene-only"
+    ],
+    "asset_ids": [
+      "AST-CLOUD-STG-09"
+    ],
+    "related_incident_ids": [],
+    "recommended_reference": {
+      "severity": "Informational",
+      "disposition": "needs_review",
+      "escalate": false,
+      "required_evidence": [
+        "91-day key age",
+        "120 GetObject events",
+        "expected data platform network",
+        "no ACL change",
+        "no unusual ASN",
+        "hygiene-only evidence"
+      ],
+      "recommended_containment": [
+        "open key rotation task for Data Platform",
+        "monitor for ACL or destination changes",
+        "do not disable the key immediately without owner coordination"
+      ]
+    }
+  },
+  "ALT-1014": {
+    "alert_id": "ALT-1014",
+    "timestamp": "2025-08-05T04:19:00Z",
+    "detector": "VPN Anomalous Admin Login",
+    "title": "VPN admin login from unusual ASN with config read",
+    "entities": {
+      "assets": [
+        "AST-VPN-EDGE-01"
+      ],
+      "accounts": [
+        "acct-net-admin-q"
+      ],
+      "ips": [
+        "203.0.113.211"
+      ]
+    },
+    "evidence": [
+      "Successful admin login to VPN edge from unusual ASN",
+      "Configuration export command executed read-only",
+      "No configuration write or new user created",
+      "MFA was satisfied on first prompt",
+      "No approved change window in asset notes"
+    ],
+    "asset_ids": [
+      "AST-VPN-EDGE-01"
+    ],
+    "related_incident_ids": [],
+    "recommended_reference": {
+      "severity": "Medium",
+      "disposition": "needs_review",
+      "escalate": false,
+      "required_evidence": [
+        "successful admin login",
+        "unusual ASN",
+        "read-only configuration export",
+        "no config write",
+        "MFA satisfied",
+        "no change window"
+      ],
+      "recommended_containment": [
+        "verify the login with Network Services owner",
+        "preserve VPN admin audit logs",
+        "require step-up MFA for the account",
+        "escalate if config changes or new users appear"
+      ]
+    }
+  },
+  "ALT-2001": {
+    "alert_id": "ALT-2001",
+    "timestamp": "2025-05-06T07:05:00Z",
+    "detector": "VPN Admin Login Anomaly",
+    "title": "VPN admin login from unusual ASN",
+    "entities": {
+      "assets": [
+        "AST-VPN-EDGE-01"
+      ],
+      "accounts": [
+        "acct-net-admin-q2"
+      ],
+      "ips": [
+        "198.51.100.201"
+      ]
+    },
+    "evidence": [
+      "Admin login by acct-net-admin-q2 from 198.51.100.201 (AS64555 synthetic offshore region), first seen for this account",
+      "Config read of remote-access policy following login"
+    ],
+    "asset_ids": [
+      "AST-VPN-EDGE-01"
+    ],
+    "related_incident_ids": [
+      "INC-2025-090"
+    ],
+    "recommended_reference": {
+      "severity": "Medium",
+      "disposition": "needs_review",
+      "escalate": false,
+      "required_evidence": [
+        "admin login from 198.51.100.201 AS64555",
+        "config read after login",
+        "first-seen ASN for account"
+      ],
+      "recommended_containment": [
+        "review VPN admin session",
+        "correlate the source IP with later identity activity"
+      ]
+    }
+  },
+  "ALT-2002": {
+    "alert_id": "ALT-2002",
+    "timestamp": "2025-05-06T07:41:00Z",
+    "detector": "Identity New Device Registration",
+    "title": "New device registered on identity plane",
+    "entities": {
+      "assets": [
+        "AST-IDP-01"
+      ],
+      "accounts": [
+        "acct-net-admin-q2"
+      ],
+      "ips": [
+        "198.51.100.246"
+      ]
+    },
+    "evidence": [
+      "New MFA device registered for acct-net-admin-q2 from 198.51.100.246",
+      "Registration follows the VPN admin login by acct-net-admin-q2 minutes earlier"
+    ],
+    "asset_ids": [
+      "AST-IDP-01"
+    ],
+    "related_incident_ids": [
+      "INC-2025-090"
+    ],
+    "recommended_reference": {
+      "severity": "High",
+      "disposition": "likely_incident",
+      "escalate": true,
+      "required_evidence": [
+        "new MFA device for acct-net-admin-q2",
+        "registration from 198.51.100.246",
+        "same account as the VPN admin login"
+      ],
+      "recommended_containment": [
+        "revoke the newly registered device",
+        "preserve identity registration logs"
+      ]
+    }
+  },
+  "ALT-2003": {
+    "alert_id": "ALT-2003",
+    "timestamp": "2025-05-06T08:22:00Z",
+    "detector": "Identity OAuth Consent Grant",
+    "title": "Broad OAuth consent grant by finance controller",
+    "entities": {
+      "assets": [
+        "AST-IDP-01"
+      ],
+      "accounts": [
+        "acct-fin-controller-x"
+      ],
+      "ips": [
+        "198.51.100.246"
+      ]
+    },
+    "evidence": [
+      "New OAuth app consented by acct-fin-controller-x requesting Mail.Read, Files.Read.All, offline_access",
+      "Consent from 198.51.100.246, the same source IP as the new-device registration"
+    ],
+    "asset_ids": [
+      "AST-IDP-01"
+    ],
+    "related_incident_ids": [
+      "INC-2025-090"
+    ],
+    "recommended_reference": {
+      "severity": "High",
+      "disposition": "likely_incident",
+      "escalate": true,
+      "required_evidence": [
+        "broad OAuth scopes Mail.Read/Files.Read.All/offline_access",
+        "consent from 198.51.100.246",
+        "same source IP as the device registration"
+      ],
+      "recommended_containment": [
+        "revoke the OAuth grant",
+        "preserve OAuth audit logs"
+      ]
+    }
+  },
+  "ALT-2004": {
+    "alert_id": "ALT-2004",
+    "timestamp": "2025-05-06T08:58:00Z",
+    "detector": "Identity MFA Fatigue + Sign-in",
+    "title": "MFA fatigue then successful sign-in for finance controller",
+    "entities": {
+      "assets": [
+        "AST-IDP-01"
+      ],
+      "accounts": [
+        "acct-fin-controller-x"
+      ],
+      "ips": [
+        "203.0.113.61"
+      ]
+    },
+    "evidence": [
+      "Sixteen MFA prompts for acct-fin-controller-x before an accepted prompt",
+      "Successful sign-in from 203.0.113.61; account matches the OAuth consent"
+    ],
+    "asset_ids": [
+      "AST-IDP-01"
+    ],
+    "related_incident_ids": [
+      "INC-2025-090"
+    ],
+    "recommended_reference": {
+      "severity": "High",
+      "disposition": "likely_incident",
+      "escalate": true,
+      "required_evidence": [
+        "sixteen MFA prompts before acceptance",
+        "sign-in from 203.0.113.61",
+        "same account as the OAuth consent"
+      ],
+      "recommended_containment": [
+        "reset the account session and require MFA reset",
+        "preserve sign-in logs"
+      ]
+    }
+  },
+  "ALT-2005": {
+    "alert_id": "ALT-2005",
+    "timestamp": "2025-05-06T09:40:00Z",
+    "detector": "Endpoint Remote-Access Tooling",
+    "title": "Remote-access tool on finance workstation",
+    "entities": {
+      "assets": [
+        "AST-FIN-LAP-07"
+      ],
+      "accounts": [
+        "acct-fin-controller-x"
+      ],
+      "ips": [
+        "203.0.113.61"
+      ],
+      "hosts": [
+        "host-fin-ws-42"
+      ]
+    },
+    "evidence": [
+      "Unsigned remote-access utility on host-fin-ws-42 under the acct-fin-controller-x session",
+      "Outbound to 203.0.113.61 blocked by EDR; no credential dump observed"
+    ],
+    "asset_ids": [
+      "AST-FIN-LAP-07"
+    ],
+    "related_incident_ids": [
+      "INC-2025-090"
+    ],
+    "recommended_reference": {
+      "severity": "Medium",
+      "disposition": "needs_review",
+      "escalate": false,
+      "required_evidence": [
+        "remote-access utility on host-fin-ws-42",
+        "blocked outbound to 203.0.113.61",
+        "same account and IP as the sign-in"
+      ],
+      "recommended_containment": [
+        "collect the EDR triage package",
+        "quarantine the workstation only if activity continues"
+      ]
+    }
+  },
+  "ALT-2006": {
+    "alert_id": "ALT-2006",
+    "timestamp": "2025-05-06T10:15:00Z",
+    "detector": "Lateral SMB File-Share Access",
+    "title": "Lateral access to claims file share",
+    "entities": {
+      "assets": [
+        "AST-FS-02"
+      ],
+      "accounts": [
+        "svc-fin-batch"
+      ],
+      "ips": [
+        "203.0.113.61"
+      ],
+      "hosts": [
+        "host-fin-ws-42"
+      ]
+    },
+    "evidence": [
+      "SMB access to AST-FS-02 from host-fin-ws-42 using service account svc-fin-batch",
+      "Access pattern outside the batch job's normal schedule"
+    ],
+    "asset_ids": [
+      "AST-FS-02"
+    ],
+    "related_incident_ids": [
+      "INC-2025-090"
+    ],
+    "recommended_reference": {
+      "severity": "Medium",
+      "disposition": "needs_review",
+      "escalate": false,
+      "required_evidence": [
+        "SMB access from host-fin-ws-42",
+        "service account svc-fin-batch",
+        "off-schedule access"
+      ],
+      "recommended_containment": [
+        "review the service-account session",
+        "correlate the source host with endpoint alerts"
+      ]
+    }
+  },
+  "ALT-2007": {
+    "alert_id": "ALT-2007",
+    "timestamp": "2025-05-06T10:52:00Z",
+    "detector": "SaaS Bulk Export Anomaly",
+    "title": "Bulk export of finance approval records",
+    "entities": {
+      "assets": [
+        "AST-FIN-APP-01"
+      ],
+      "accounts": [
+        "svc-fin-batch"
+      ],
+      "ips": [
+        "203.0.113.61"
+      ],
+      "domains": [
+        "ledger-sync-portal.example"
+      ]
+    },
+    "evidence": [
+      "2,700 approval records exported by svc-fin-batch to ledger-sync-portal.example",
+      "Export from 203.0.113.61, outside any scheduled window"
+    ],
+    "asset_ids": [
+      "AST-FIN-APP-01"
+    ],
+    "related_incident_ids": [
+      "INC-2025-090"
+    ],
+    "recommended_reference": {
+      "severity": "High",
+      "disposition": "likely_incident",
+      "escalate": true,
+      "required_evidence": [
+        "2,700 approval records exported",
+        "unapproved destination ledger-sync-portal.example",
+        "export from 203.0.113.61"
+      ],
+      "recommended_containment": [
+        "pause the service-account token and approvals-app session",
+        "preserve SaaS export logs",
+        "escalate to privacy/legal for finance data exposure"
+      ]
+    }
+  },
+  "ALT-2008": {
+    "alert_id": "ALT-2008",
+    "timestamp": "2025-05-06T11:29:00Z",
+    "detector": "Cloud Storage External Staging",
+    "title": "Exported data staged to external drop",
+    "entities": {
+      "assets": [
+        "AST-CLOUD-STG-09"
+      ],
+      "accounts": [
+        "svc-data-pipeline-z"
+      ],
+      "ips": [
+        "203.0.113.61"
+      ],
+      "domains": [
+        "ledger-sync-portal.example"
+      ]
+    },
+    "evidence": [
+      "Objects written to a bucket path then forwarded to ledger-sync-portal.example",
+      "Destination matches the approvals-app export destination"
+    ],
+    "asset_ids": [
+      "AST-CLOUD-STG-09"
+    ],
+    "related_incident_ids": [
+      "INC-2025-090"
+    ],
+    "recommended_reference": {
+      "severity": "High",
+      "disposition": "likely_incident",
+      "escalate": true,
+      "required_evidence": [
+        "staging then forward to ledger-sync-portal.example",
+        "same destination as the approvals export",
+        "regulated bucket"
+      ],
+      "recommended_containment": [
+        "restrict the bucket path and preserve object access logs",
+        "block the destination domain"
+      ]
+    }
+  },
+  "ALT-2009": {
+    "alert_id": "ALT-2009",
+    "timestamp": "2025-05-06T10:05:00Z",
+    "detector": "Identity OAuth Consent Grant",
+    "title": "Sanctioned HR integration OAuth consent (approved window)",
+    "entities": {
+      "assets": [
+        "AST-IDP-01"
+      ],
+      "accounts": [
+        "acct-hr-intern-z"
+      ],
+      "ips": [
+        "203.0.113.51"
+      ],
+      "domains": [
+        "people-sync-approved.example"
+      ]
+    },
+    "evidence": [
+      "OAuth app 'People Sync' consented requesting User.Read only",
+      "Approved CHG-4471 change window; destination on the sanctioned integrations list"
+    ],
+    "asset_ids": [
+      "AST-IDP-01"
+    ],
+    "related_incident_ids": [],
+    "recommended_reference": {
+      "severity": "Low",
+      "disposition": "benign_false_positive",
+      "escalate": false,
+      "required_evidence": [
+        "narrow User.Read scope",
+        "approved CHG-4471 window",
+        "different account and IP from the campaign"
+      ],
+      "recommended_containment": [
+        "document the sanctioned integration",
+        "no containment required"
+      ]
+    }
+  },
+  "ALT-2010": {
+    "alert_id": "ALT-2010",
+    "timestamp": "2025-05-06T06:30:00Z",
+    "detector": "VPN Edge Exploit Signature",
+    "title": "Approved scanner VPN probe",
+    "entities": {
+      "assets": [
+        "AST-VPN-EDGE-01"
+      ],
+      "accounts": [
+        "svc-approved-scan"
+      ],
+      "ips": [
+        "203.0.113.51"
+      ]
+    },
+    "evidence": [
+      "Exploit signature from the redcanary-scan user-agent during the weekly scan window",
+      "Blocked at the edge; source is the approved scanner segment"
+    ],
+    "asset_ids": [
+      "AST-VPN-EDGE-01"
+    ],
+    "related_incident_ids": [],
+    "recommended_reference": {
+      "severity": "Low",
+      "disposition": "benign_false_positive",
+      "escalate": false,
+      "required_evidence": [
+        "redcanary-scan user-agent",
+        "weekly approved scan window",
+        "different account from the campaign"
+      ],
+      "recommended_containment": [
+        "document the approved scan",
+        "no production containment"
+      ]
+    }
+  }
+}

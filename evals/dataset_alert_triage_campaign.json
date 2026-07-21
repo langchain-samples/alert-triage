@@ -1,0 +1,41 @@
+[
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Triage these five alerts together as one investigation: ALT-2004, ALT-2005, ALT-2006, ALT-2007, ALT-2009. Decide whether they are a single coordinated campaign or independent events, and exclude any decoy that only looks similar. Give the shared pivot entities, an aggregate severity and escalation decision for the campaign as a whole, and one consolidated containment plan."}]},
+    "outputs": {
+      "reference_answer": "ALT-2004 through ALT-2007 are one coordinated account-takeover campaign; ALT-2009 is a decoy and is excluded.\nAll four linked alerts share the source IP 203.0.113.61, and are further chained by the finance account acct-fin-controller-x (ALT-2004, ALT-2005), the workstation host-fin-ws-42 (ALT-2005, ALT-2006), and the service account svc-fin-batch (ALT-2006, ALT-2007): MFA-fatigue sign-in (ALT-2004) -> remote-access tool on the finance workstation (ALT-2005) -> lateral SMB access to the claims file share (ALT-2006) -> bulk export of approval records to ledger-sync-portal.example (ALT-2007). INC-2025-090 matches the pattern.\nALT-2009 is excluded: a sanctioned HR-integration OAuth consent (acct-hr-intern-z, IP 203.0.113.51) in the approved CHG-4471 window — different account and IP.\naggregate_severity: Critical\naggregate_escalate: true\nIndividually the alerts were Medium/High, but the full chain — identity, endpoint, lateral movement, and data exfiltration from one source IP — is a Critical incident.\nrecommended_containment:\n  - Disable acct-fin-controller-x and svc-fin-batch; isolate host-fin-ws-42.\n  - Block 203.0.113.61 and ledger-sync-portal.example; restrict the approvals app and claims file share.\n  - Preserve identity, endpoint, file-share, and export logs; page the incident commander and notify privacy/legal.\ncitations: ALT-2004, ALT-2005, ALT-2006, ALT-2007, ALT-2009, AST-IDP-01, AST-FIN-LAP-07, AST-FS-02, AST-FIN-APP-01, INC-2025-090, severity_rubric.md, escalation_containment.md",
+      "is_coordinated_campaign": true,
+      "linked_alert_ids": ["ALT-2004", "ALT-2005", "ALT-2006", "ALT-2007"],
+      "excluded_alert_ids": ["ALT-2009"],
+      "pivot_entities": ["203.0.113.61", "acct-fin-controller-x", "host-fin-ws-42", "svc-fin-batch", "INC-2025-090"],
+      "aggregate_severity": "Critical",
+      "aggregate_escalate": true
+    },
+    "metadata": {"intent": "campaign_correlation", "lab": "alert-triage/04_deep_agent", "kind": "coordinated_ip_pivot_with_decoy"}
+  },
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Triage ALT-1005 and ALT-1008 together. Are they a single coordinated campaign, and what is the aggregate severity?"}]},
+    "outputs": {
+      "reference_answer": "These are independent events, not a coordinated campaign. ALT-1005 is an approved-scanner VPN exploit signature (AST-VPN-EDGE-01 / AST-SCAN-01, account svc-approved-scan, redcanary-scan user-agent) and ALT-1008 is a Detection Engineering sandbox blocked test-malware string (AST-DEV-SBX-03, account acct-detect-eng-c). They share no account, IP, asset, or incident, and both are benign in isolation.\nis_coordinated_campaign: false\nlinked_alert_ids: none\naggregate_severity: Low\naggregate_escalate: false\nrecommended_containment: document the approved scan and the sandbox test context; no production containment.\ncitations: ALT-1005, ALT-1008, AST-SCAN-01, AST-DEV-SBX-03, false_positive_guidance.md",
+      "is_coordinated_campaign": false,
+      "linked_alert_ids": [],
+      "excluded_alert_ids": [],
+      "pivot_entities": [],
+      "aggregate_severity": "Low",
+      "aggregate_escalate": false
+    },
+    "metadata": {"intent": "campaign_correlation", "lab": "alert-triage/04_deep_agent", "kind": "independent_events"}
+  },
+  {
+    "inputs": {"messages": [{"role": "user", "content": "Triage ALT-1001, ALT-1011, and ALT-1012 together. Are they one coordinated campaign against the identity plane? Give the shared pivot, aggregate severity, escalation, and one containment plan."}]},
+    "outputs": {
+      "reference_answer": "This is one coordinated identity-plane campaign across ALT-1001, ALT-1011, and ALT-1012. The linkage: the finance approver account acct-fin-approver-a appears in ALT-1001 (impossible travel + broad OAuth grant) and ALT-1012 (finance-workstation suspicious script on AST-FIN-LAP-07), the tier-0 identity tenant AST-IDP-01 is targeted in ALT-1001 and ALT-1011 (privileged-admin MFA fatigue), and the source IPs cluster in 198.51.100.0/24; all map to the INC-2025-014 OAuth-consent-phishing pattern.\naggregate_severity: Critical\naggregate_escalate: true\nCoordinated targeting of the identity control plane plus a privileged finance approver is Critical even though the individual alerts were High.\nrecommended_containment:\n  - Revoke the OAuth grant, reset acct-fin-approver-a and step-up the IdP admin account.\n  - Preserve identity sign-in/OAuth logs and isolate AST-FIN-LAP-07 if the script persisted.\n  - Page the incident commander for privileged-identity escalation.\ncitations: ALT-1001, ALT-1011, ALT-1012, AST-IDP-01, AST-FIN-LAP-07, INC-2025-014, severity_rubric.md, escalation_containment.md",
+      "is_coordinated_campaign": true,
+      "linked_alert_ids": ["ALT-1001", "ALT-1011", "ALT-1012"],
+      "excluded_alert_ids": [],
+      "pivot_entities": ["acct-fin-approver-a", "AST-IDP-01", "AST-FIN-LAP-07", "INC-2025-014"],
+      "aggregate_severity": "Critical",
+      "aggregate_escalate": true
+    },
+    "metadata": {"intent": "campaign_correlation", "lab": "alert-triage/04_deep_agent", "kind": "coordinated_identity_plane"}
+  }
+]
