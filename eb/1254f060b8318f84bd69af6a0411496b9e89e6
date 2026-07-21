@@ -1,0 +1,85 @@
+.gitignore
+  s_3c0c811ccc4c2c::t_a88dc3addfc866 1-27
+.python-version
+  s_3c0c811ccc4c2c::t_1a3fc63b19f1c1 1
+alert_triage_graph.py
+  s_3c0c811ccc4c2c::t_8db89565c32f82 1-384
+data/agent/AGENTS.md
+  s_3c0c811ccc4c2c::t_334f05c3875994 1-23
+data/agent/skills/campaign-correlation/SKILL.md
+  s_3c0c811ccc4c2c::t_1fe37691f76db4 1-28
+data/alerts.json
+  s_3c0c811ccc4c2c::t_69295a8f5a59ba 1-1105
+data/assets.json
+  s_3c0c811ccc4c2c::t_c4a898653f9d59 1-205
+data/checks.py
+  s_3c0c811ccc4c2c::t_271ba2e543a3a8 1-231
+data/incidents.json
+  s_3c0c811ccc4c2c::t_514ba910713d9d 1-175
+data/kb/asset_criticality_guidance.md
+  s_3c0c811ccc4c2c::t_6ba5cb89681c4a 1-23
+data/kb/escalation_containment.md
+  s_3c0c811ccc4c2c::t_9e74870f1aad81 1-27
+data/kb/false_positive_guidance.md
+  s_3c0c811ccc4c2c::t_52b9b6c6ad0a6e 1-12
+data/kb/identity_endpoint_cloud_indicators.md
+  s_3c0c811ccc4c2c::t_a473b034f147a4 1-21
+data/kb/severity_rubric.md
+  s_3c0c811ccc4c2c::t_079a89ca18da59 1-27
+data/kb/triage_playbook.md
+  s_3c0c811ccc4c2c::t_b2826b90f21a29 1-25
+data/prompt.md
+  s_3c0c811ccc4c2c::t_3e9d69f7f404ee 1-42
+evals/dataset_alert_triage.json
+  s_3c0c811ccc4c2c::t_2500eecea2046e 1-132
+evals/dataset_alert_triage_campaign.json
+  s_3c0c811ccc4c2c::t_6b047ae2376f03 1-41
+evals/seed_alert_triage.py
+  s_3c0c811ccc4c2c::t_2fceb8e91dec61 1-65
+evals/seed_alert_triage_campaign.py
+  s_3c0c811ccc4c2c::t_1467d575f7f768 1-58
+notebooks/01_build.ipynb
+  s_3c0c811ccc4c2c::t_29fa13f88377cc 1-485
+notebooks/02_evaluate.ipynb
+  s_3c0c811ccc4c2c::t_719950acbe89d4 1-847
+notebooks/03_orchestrate.ipynb
+  s_3c0c811ccc4c2c::t_8886929cefe933 1-526
+notebooks/04_deep_agent.ipynb
+  s_3c0c811ccc4c2c::t_7adbebb49d3a86 1-1316
+notebooks/05_observe.ipynb
+  s_3c0c811ccc4c2c::t_cebe5a7f661551 1-346
+utils/langsmith_rules.py
+  s_3c0c811ccc4c2c::t_a0f5d4cf181879 1-90
+utils/models.py
+  s_3c0c811ccc4c2c::t_7c0c08a19fcf8b 1-31
+utils/prompts.py
+  s_3c0c811ccc4c2c::t_50938f9ef6f3d0 1-84
+utils/trace.py
+  s_3c0c811ccc4c2c::t_7fc45643e82522 1-70
+uv.lock
+  s_3c0c811ccc4c2c::t_9cf15c6d442877 1-3777
+.env.example
+  s_3c0c811ccc4c2c::t_544c3e6d916fa5 1-20
+README.md
+  s_3c0c811ccc4c2c::t_c6062cc99185cd 1-82
+langgraph.json
+  s_3c0c811ccc4c2c::t_f588a7db8e682e 1-11
+pyproject.toml
+  s_3c0c811ccc4c2c::t_b38213a2d0655c 1-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.15",
+  "base_commit_sha": "eb1254f060b8318f84bd69af6a0411496b9e89e6",
+  "prompts": {},
+  "sessions": {
+    "s_3c0c811ccc4c2c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "aebbd827-1d5c-42f9-b79b-da69c9855d8b",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Ariel Herrera <ariel.herrera@langchain.dev>"
+    }
+  }
+}
