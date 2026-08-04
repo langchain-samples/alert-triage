@@ -1,0 +1,23 @@
+README.md
+  s_dace500fcceecf::t_d9418bc5d9848f 79
+  s_dace500fcceecf::t_34f9f6ef1b3382 46-48
+  s_dace500fcceecf::t_b3a1dc431e91fb 11,19
+notebooks/04_deep_agent_local.ipynb
+  s_dace500fcceecf::t_c2a86c10e52321 1-1221
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "e6ee02b352e1840562ddbb5b9a622d0c7ed58b48",
+  "prompts": {},
+  "sessions": {
+    "s_dace500fcceecf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "951c729f-ee26-41d7-9941-8c037bfb134b",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Ariel Herrera <ariel.herrera@langchain.dev>"
+    }
+  }
+}
