@@ -8,7 +8,7 @@ asset context, prior incidents, and a SOC knowledge base — and returns a typed
 disposition, escalation, cited rationale, containment). Everything runs on **synthetic, fictional data**
 (no real incidents, PII, secrets, or live telemetry).
 
-## What you'll build (5 notebooks)
+## What you'll build (6 notebooks)
 
 | Notebook | You learn |
 |---|---|
@@ -16,6 +16,7 @@ disposition, escalation, cited rationale, containment). Everything runs on **syn
 | `02_evaluate.ipynb` | Seed an eval dataset and score the agent with LangSmith `evaluate()` (custom evaluators). |
 | `03_orchestrate.ipynb` | Add middleware — human-in-the-loop approval, PII redaction, tool-call limits — and memory/threads. |
 | `04_deep_agent.ipynb` | Scale to a **deep agent**: a coordinator delegating to sub-agents for multi-alert campaign correlation. |
+| `04_deep_agent_local.ipynb` | The same capstone with **no LangSmith at all** — build the trace yourself (audit middleware, message history, token cost) and measure with a local eval loop. Start here if you have no platform access. |
 | `05_observe.ipynb` | Production observability: tracing, online-eval run rules, and routing low scores to annotation queues. |
 
 ## Prerequisites
@@ -42,6 +43,9 @@ Open `notebooks/01_build.ipynb` and run top to bottom, then continue through `05
 
 - **Runs without LangSmith:** `01_build`, `03_orchestrate` — the system prompt falls back to the
   committed `data/prompt.md`, and trace links are simply skipped.
+- **Runs without LangSmith by design:** `04_deep_agent_local` — no traces, no hosted datasets, no Studio.
+  It reads the prompt from disk, builds its own audit log and trajectory view, and scores the committed
+  campaign dataset in a local eval loop. Only an `OPENAI_API_KEY` is needed.
 - **Needs `LANGSMITH_API_KEY`:** `02_evaluate`, `04_deep_agent` (eval sections), `05_observe` — these
   seed datasets, run experiments, and create observability rules in **your own** workspace.
 
@@ -72,7 +76,7 @@ alert-triage/
 ├── utils/                  # model selection, prompt loading, tracing, online-eval rules
 ├── evals/                  # dataset seeders + committed eval datasets (JSON)
 ├── data/                   # synthetic fixtures: alerts, assets, incidents, SOC KB, agent skills
-├── notebooks/              # the 5 lab notebooks (+ images)
+├── notebooks/              # the 6 lab notebooks (+ images)
 └── langgraph.json          # graph registry for LangGraph Studio
 ```
 
